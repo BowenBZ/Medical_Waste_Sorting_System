@@ -29,4 +29,9 @@ password: ecomed
 3. Use the following command to run the script  
 ```xvfb-run python3 camera_control.py```
 
-
+## Data Collection
+* In order to collect the data, just run the script of `data_collection.py`, if you use ssh to connect the pi, use the following command  
+```xvfb-run python3 data_collection.py``` 
+* In order to see the image you collect, type the command of   
+```python  -m  SimpleHTTPServer``` on your pi, 
+then you can open your brower and type `10.19.190.49:8000` to see the images
