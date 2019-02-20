@@ -20,7 +20,7 @@
 
 ## Run the Demo
 1. Use the following command to log into our raspberry pi  
-```ssh pi@10.18.228.165```  
+```ssh pi@10.19.109.82```  
 password: ecomed
 
 2. Go to the following directory  
@@ -33,5 +33,15 @@ password: ecomed
 * In order to collect the data, just run the script of `data_collection.py`, if you use ssh to connect the pi, use the following command  
 ```xvfb-run python3 data_collection.py``` 
 * In order to see the image you collect, type the command of   
-```python  -m  SimpleHTTPServer``` on your pi, 
-then you can open your brower and type `10.18.228.165:8000` to see the images
+```python -m SimpleHTTPServer``` on your pi, 
+then you can open your brower and type `10.19.109.82:8000` to see the images
+
+## Deploy the model to raspberry pi
+In order to use tensorflow-lite
+```
+rm -rf  /home/pi/.local/lib/python3.5/site-packages/tensorflow
+sudo pip3 uninstall tensorflow
+git clone https://github.com/PINTO0309/Tensorflow-bin.git
+cd Tensorflow-bin
+sudo pip3 install tensorflow-1.11.0-cp35-cp35m-linux_armv7l.whl
+```

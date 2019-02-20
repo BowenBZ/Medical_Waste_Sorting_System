@@ -77,6 +77,7 @@ try:
         # frame_rate_calc = 1/time1
 
         # Press 'q' to quit
+        cv2.waitKey(1)
         sleep(1.5)
         rawCapture.truncate(0)
 except KeyboardInterrupt:
