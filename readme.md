@@ -20,7 +20,7 @@
 
 ## Run the Demo
 1. Use the following command to log into our raspberry pi  
-```ssh pi@10.19.190.49```  
+```ssh pi@10.18.228.165```  
 password: ecomed
 
 2. Go to the following directory  
@@ -34,4 +34,4 @@ password: ecomed
 ```xvfb-run python3 data_collection.py``` 
 * In order to see the image you collect, type the command of   
 ```python  -m  SimpleHTTPServer``` on your pi, 
-then you can open your brower and type `10.19.190.49:8000` to see the images
+then you can open your brower and type `10.18.228.165:8000` to see the images
