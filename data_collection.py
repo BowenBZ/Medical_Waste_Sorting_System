@@ -45,7 +45,7 @@ rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
 rawCapture.truncate(0)
 
 # Wait the camera set up
-wait_time = 2
+wait_time = 4
 current_time = 0
 
 try:
@@ -77,7 +77,7 @@ try:
         # frame_rate_calc = 1/time1
 
         # Press 'q' to quit
-        sleep(3)
+        sleep(1.5)
         rawCapture.truncate(0)
 except KeyboardInterrupt:
     camera.close()
