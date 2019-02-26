@@ -106,8 +106,7 @@ freq = cv2.getTickFrequency()
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 # Code about the motors
-import motor_control
-motor_control.initialize_motor()
+import step_motor_control
 
 # Initialize camera and perform object detection.
 # The camera has to be set up and used differently depending on if it's a
@@ -117,15 +116,15 @@ motor_control.initialize_motor()
 # detection loop twice, and made one work for Picamera and the other work
 # for USB.
 
-### Picamera ###
-if camera_type == 'picamera':
-    # Initialize Picamera and grab reference to the raw capture
-    camera = PiCamera()
-    camera.resolution = (IM_WIDTH,IM_HEIGHT)
-    camera.framerate = 5
-    rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
-    rawCapture.truncate(0)
 
+# Initialize Picamera and grab reference to the raw capture
+camera = PiCamera()
+camera.resolution = (IM_WIDTH,IM_HEIGHT)
+camera.framerate = 5
+rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
+rawCapture.truncate(0)
+
+try:
     for frame1 in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):
 
         t1 = cv2.getTickCount()
@@ -169,21 +168,29 @@ if camera_type == 'picamera':
         guesses = list_send.copy()
 
 #################################edit starts##########################################
-        print(guesses)
+        # print(guesses)
         # pixels_num = frame.shape[0] * frame.shape[1]
         # print('R:', sum(sum(frame[:, :, 0])) / pixels_num, \
         # 	'G:', sum(sum(frame[:, :, 1])) / pixels_num, \
         # 	'B:', sum(sum(frame[:, :, 2])) / pixels_num)
+        if guesses == []:
+            print("None")
+
         for guess in guesses:
-        	if 'bottle' in guess or 'book' in guess or 'stop sign' in guess:
-        		if motor_control.motor_moving == False:
-	        		motor_control.handle_classify(1)
-	        if 'cell phone' in guess or 'cup' in guess:
-	        	if motor_control.motor_moving == False:
-	        		motor_control.handle_classify(2)
-	        if 'toilet' in guess:
-	        	if motor_control.motor_moving == False:
-	        		motor_control.handle_classify(3)
+            if 'refrigerator' in guess:
+                print('Sharp')
+                if not step_motor_control.motor_moving:
+                    step_motor_control.classify(1)
+
+            if 'umbrella' in guess or 'person' in guess:
+                print("Gauze")
+                if not step_motor_control.motor_moving:
+                    step_motor_control.classify(2)
+
+            if 'toilet' in guess:
+                print("Garbage")
+                if not step_motor_control.motor_moving:
+                    step_motor_control.classify(3)
 
 ###################################edit ends##########################################
         cv2.putText(frame,"FPS: {0:.2f}".format(frame_rate_calc),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
@@ -199,56 +206,14 @@ if camera_type == 'picamera':
         if cv2.waitKey(1) == ord('q'):
             break
 
+        sleep(1)
         rawCapture.truncate(0)
 
+except KeyboardInterrupt:
+    step_motor_control.classify(0)
     camera.close()
+    cv2.destroyAllWindows()
+    GPIO.cleanup()
 
-### USB webcam ###
-elif camera_type == 'usb':
-    # Initialize USB webcam feed
-    camera = cv2.VideoCapture(0)
-    ret = camera.set(3,IM_WIDTH)
-    ret = camera.set(4,IM_HEIGHT)
 
-    while(True):
-
-        t1 = cv2.getTickCount()
-
-        # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
-        # i.e. a single-column array, where each item in the column has the pixel RGB value
-        ret, frame = camera.read()
-        frame_expanded = np.expand_dims(frame, axis=0)
-
-        # Perform the actual detection by running the model with the image as input
-        (boxes, scores, classes, num) = sess.run(
-            [detection_boxes, detection_scores, detection_classes, num_detections],
-            feed_dict={image_tensor: frame_expanded})
-
-        # Draw the results of the detection (aka 'visulaize the results')
-        vis_util.visualize_boxes_and_labels_on_image_array(
-            frame,
-            np.squeeze(boxes),
-            np.squeeze(classes).astype(np.int32),
-            np.squeeze(scores),
-            category_index,
-            use_normalized_coordinates=True,
-            line_thickness=8,
-            min_score_thresh=0.85)
-
-        cv2.putText(frame,"FPS: {0:.2f}".format(frame_rate_calc),(30,50),font,1,(255,255,0),2,cv2.LINE_AA)
-        
-        # All the results have been drawn on the frame, so it's time to display it.
-        cv2.imshow('Object detector', frame)
-
-        t2 = cv2.getTickCount()
-        time1 = (t2-t1)/freq
-        frame_rate_calc = 1/time1
-
-        # Press 'q' to quit
-        if cv2.waitKey(1) == ord('q'):
-            break
-
-    camera.release()
-
-cv2.destroyAllWindows()
 
