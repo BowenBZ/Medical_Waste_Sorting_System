@@ -11,7 +11,7 @@ git clone https://github.com/PINTO0309/Tensorflow-bin.git
 cd Tensorflow-bin
 sudo pip3 install tensorflow-1.11.0-cp35-cp35m-linux_armv7l.whl  
 ```
-	* In order to use the tensorflow-lite in raspberry pi, we need to install a specific version of tensorflow  
+	* In order to use the tensorflow-lite in raspberry pi, we need to install a specific version of tensorflow
 ```
 	rm -rf  /home/pi/.local/lib/python3.5/site-packages/tensorflow  
 	sudo pip3 uninstall tensorflow  
