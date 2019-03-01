@@ -32,19 +32,23 @@ sudo pip3 install tensorflow-1.11.0-cp35-cp35m-linux_armv7l.whl
 
 ## Connect to the Pi
 1. Use the following command to log into our raspberry pi  
-`ssh pi@10.19.109.82`  
+`ssh pi@10.19.85.180`  
 password: `ecomed`
 2. Go to the following directory  
 ```cd Ecomed```
 3. When you connect to the Pi from remote machine, you need to add `xvfb-run` before the command because some script contains image showing code, however there is no screen connecting to it.
 
 ## Data Collection
-* In order to collect the data, just run the script of `data_collection.py`, if you use ssh to connect the pi, use the following command  
-```xvfb-run python3 data_collection.py```
+* In order to collect the data, just run the script of `data_collection.py` in the folder of `Ecomed`
+	* if you use ssh to connect the pi, use the following command
+	```xvfb-run <-a> python3 data_collection.py```
+	* the scene will let you input the name of the categories first, you can use a new name or a preexisted name
+	* when the window show the images of the scene, if you press `s`, you can save one image into the disk
+	* when you want to quit, just press `q` or use `ctrl+c`
 
 * In order to see the image you collect, type the command of
 ```python -m SimpleHTTPServer``` on your pi, 
-then you can open your brower and type `10.19.109.82:8000` to see the folders
+then you can open your brower and type `10.19.85.180:8000` to see the folders
 
 ## Model Training
 * We use the MobileNetV2 model to train the data, and we can get a about 0.98 accuracy on the validation dataset, then we saved the model as a `.h5` file
