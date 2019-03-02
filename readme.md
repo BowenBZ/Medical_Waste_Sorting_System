@@ -45,6 +45,7 @@ password: `ecomed`
 	* the scene will let you input the name of the categories first, you can use a new name or a preexisted name
 	* when the window show the images of the scene, if you press `s`, you can save one image into the disk
 	* when you want to quit, just press `q` or use `ctrl+c`
+	* when you press `r`, you can delete the image one by one
 
 * In order to see the image you collect, type the command of
 ```python -m SimpleHTTPServer``` on your pi, 

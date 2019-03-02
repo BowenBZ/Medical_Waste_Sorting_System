@@ -70,7 +70,7 @@ try:
         frame.setflags(write=1)
         
         # Show the image
-        cv2.imshow('Object detector', frame)
+        cv2.imshow('Live Video', frame)
         cv2.waitKey(25)
         
         # detect keyboard
@@ -78,16 +78,41 @@ try:
         if 'q' in key:
             break
         elif 's' in key:
-            print(frame.shape, image_index)
+            # Show in the command line
+            print('Save', image_index, 'shape', frame.shape)
 
+            # Make the label in the same order
             if image_index < 10:
                 str_index = '0' + str(image_index)
             else:
                 str_index = str(image_index)
 
+            # Save the image
             filename = data_path + '/' + category + '/' + category + '_' + str_index +'.jpg'
             cv2.imwrite(filename, frame)
             image_index += 1
+
+            # Show the image
+            cv2.imshow('Last time image', frame)
+            cv2.waitKey(1)
+        elif 'r' in key:
+            if image_index > 0:
+                # Get the index of the image
+                image_index -= 1
+                if image_index < 10:
+                    str_index = '0' + str(image_index)
+                else:
+                    str_index = str(image_index)
+
+                # Generate the remove function
+                command = 'rm ' + data_path + '/' + category + '/' + category + '_' + str_index +'.jpg'
+                
+                # Do the command
+                os.system(command)
+
+                # Print in terminal
+                print('Delete: ', str(image_index))
+
 
         # Get new frames
         rawCapture.truncate(0)
