@@ -52,11 +52,26 @@ password: `ecomed`
 then you can open your brower and type `10.19.85.180:8000` to see the folders
 
 ## Model Training
-* We use the MobileNetV2 model to train the data, and we can get a about 0.98 accuracy on the validation dataset, then we saved the model as a `.h5` file
-* We then use tensorflow-lite to transfer the model to a `.tflite` model
-* We use the MobileNetV2 model to train the data, and we can get a about 0.98 accuracy on the validation dataset, then we saved the model as a .h5 file
-* We then use tensorflow-lite to transfer the model to a .tflite model
-* Copy that model file to the Pi
+### Model Structure
+* We use MobileNet model to do the transfer learning. 
+	* Load the pretrained MobileNet model
+	* Add several new layers
+* Optimizer uses `tf.train.GradientDescentOptimizer(0.001)`
+* Batch Size of data is `24`
+* Epoch is around `60`
+
+### Model Transfer
+* Save model 
+	* We use the command `tf.contrib.saved_model.save_keras_model()` to save the model after the epoches stops
+	* We encountered some problem when using the method of callbacks to save model. Because 
+		* when we use `tf.keras.SGD` to be the optimizer, we cannot load the saved file later. The command line said we should use `tf.train.optimizer` to be the optimizer
+		* when we use `tf.train.GradientDescentOptimizer` to be the optimizer, the command line said we cannot save the optimizer...
+* Load model
+	* We use the command `tf.contrib.saved_model.load_keras_model()` to load model
+* Transfer model
+	* We have a `.h5` file at the beginning
+	* We use tensorflow-lite to transfer the model to a `.tflite` model
+	* Copy that model file to the Pi
 
 ## Run the Demo
 Just run the script of `main.py`. However, we haven't finished the detecting code in real machine, so we need to go to the folder `~/Ecomed/object_detection` and run the following script
