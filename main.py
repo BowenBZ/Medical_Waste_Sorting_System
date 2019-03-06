@@ -31,25 +31,13 @@ def run_interpreter(input_data):
     interpreter.invoke()
     # We have to use get_tensor to load the output.
     output_data = interpreter.get_tensor(output_details[0]['index'])
-    #out = heapq.nlargest(3, enumerate(output_data), itemgetter(1))
-    out = np.argmax(output_data)
+    # 
+    out = np.array(output_data)
+    #out = np.argmax(output_data)
 
     return out
 
-class_names = ['background',
-				 'needles_I_V_Cannula',
-				 'needles_safety',
-				 'needles_black',
-				 'needles_yellow',
-				 'garbage_gloves',
-				 'syringes_large',
-				 'garbage_alcohol_pad',
-				 'needles_butterfly',
-				 'syringes_small',
-				 'needles_pink',
-				 'syringes_1ml',
-				 'garbage_cotton_ball',
-				 'needles_blood_collection']
+class_names = ["pharmaceutical", "sharps", "trace_chemo"]
 				
 # Set up camera constants
 #MAX is 1280
@@ -78,14 +66,15 @@ try:
         resized_frame = (resized_frame / 255).astype(np.float32)
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
+        print(class_names)
         print(predict)
-        if predict < 14:
-        	print(class_names[predict])
+        print("\n")
+        # if max(predict) > 1e-7:
+        #     print("Predict Answer is:", class_names[int(np.argmax(predict))])
         
         cv2.imshow("window", frame)
-        cv2.waitKey(1)
+        cv2.waitKey(25)
 
-        sleep(1)
         rawCapture.truncate(0)
 except KeyboardInterrupt:
     camera.close()
