@@ -32,7 +32,7 @@ def run_interpreter(input_data):
     # We have to use get_tensor to load the output.
     output_data = interpreter.get_tensor(output_details[0]['index'])
     # 
-    out = np.array(output_data)
+    out = output_data[0]
     #out = np.argmax(output_data)
 
     return out
@@ -66,8 +66,11 @@ try:
         resized_frame = (resized_frame / 255).astype(np.float32)
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
-        print({class_names, predict})
-        print(class_names[int(np.argmax(predict))])
+        print(predict)
+        if abs(predict[0] - predict[2]) <= 0.9999 and predict[0] > 0.9:
+            print(class_names[0])
+        else:
+            print(class_names[int(np.argmax(predict))])
         print("\n")
 
         cv2.imshow("window", frame)
