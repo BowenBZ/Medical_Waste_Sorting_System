@@ -12,7 +12,7 @@ from operator import itemgetter
 
 # The folder that store the models
 model_path = './models'
-tflite_model_path = os.path.join(model_path, 'model.tflite')
+tflite_model_path = os.path.join(model_path, 'model_4classes.tflite')
 # Create a tflite interpreter, this is the part of tflite that actually runs models.
 interpreter = tf.contrib.lite.Interpreter(model_path=tflite_model_path)
 # Allocate memory for the all the weight tensors and such.
@@ -37,7 +37,7 @@ def run_interpreter(input_data):
 
     return out
 
-class_names = ["pharmaceutical", "sharps", "trace_chemo"]
+class_names = ["background", "pharmaceutical", "sharps", "trace_chemo"]
 				
 # Set up camera constants
 #MAX is 1280
@@ -66,12 +66,10 @@ try:
         resized_frame = (resized_frame / 255).astype(np.float32)
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
-        print(class_names)
-        print(predict)
+        print({class_names, predict})
+        print(class_names[int(np.argmax(predict))])
         print("\n")
-        # if max(predict) > 1e-7:
-        #     print("Predict Answer is:", class_names[int(np.argmax(predict))])
-        
+
         cv2.imshow("window", frame)
         cv2.waitKey(25)
 

@@ -32,7 +32,7 @@ sudo pip3 install tensorflow-1.11.0-cp35-cp35m-linux_armv7l.whl
 
 ## Connect to the Pi
 1. Use the following command to log into our raspberry pi  
-`ssh pi@10.19.85.180`  
+`ssh pi@10.19.132.243`  
 password: `ecomed`
 2. Go to the following directory  
 ```cd Ecomed```
@@ -49,7 +49,7 @@ password: `ecomed`
 
 * In order to see the image you collect, type the command of
 ```python -m SimpleHTTPServer``` on your pi, 
-then you can open your brower and type `10.19.85.180:8000` to see the folders
+then you can open your brower and type `10.19.132.243:8000` to see the folders
 
 ## Model Training
 ### Model Structure
