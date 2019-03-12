@@ -42,9 +42,6 @@ if os.path.isdir(data_path + '/' + category):
 else:
     os.mkdir(data_path + '/' + category)
 
-if not os.path.isdir(data_path_crop + '/' + category):
-    os.mkdir(data_path_crop + '/' + category)
-
 # Set up camera constants
 # MAX is 1280
 IM_WIDTH = 640
@@ -107,6 +104,7 @@ try:
             # Save the image
             filename = data_path_crop + '/' + category + '/' + category + '_' + str_index +'.jpg'
             cv2.imwrite(filename, frame)
+            image_index += 1
 
         elif ord('r') == key:
             if image_index > 0:

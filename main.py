@@ -32,7 +32,7 @@ def run_interpreter(input_data):
     # We have to use get_tensor to load the output.
     output_data = interpreter.get_tensor(output_details[0]['index'])
     # 
-    out = np.array(output_data)
+    out = output_data[0]
     #out = np.argmax(output_data)
 
     return out
@@ -42,7 +42,6 @@ class_names = ["background", "pharmaceutical", "sharps", "trace_chemo"]
 # Set up camera constants
 #MAX is 1280
 IM_WIDTH = 640
-IM_HEIGHT = 640
 
 # Initialize frame rate calculation
 frame_rate_calc = 1
@@ -51,9 +50,9 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 
 # Initialize Picamera and grab reference to the raw capture
 camera = PiCamera()
-camera.resolution = (IM_WIDTH,IM_HEIGHT)
+camera.resolution = (IM_WIDTH,IM_WIDTH)
 camera.framerate = 5
-rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
+rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_WIDTH))
 rawCapture.truncate(0)
 
 try:
@@ -62,15 +61,21 @@ try:
         frame = frame1.array
         frame.setflags(write=1)
 
-        resized_frame = cv2.resize(frame, (224, 224))
+        height, width, _ = frame.shape
+        resized_frame = frame[:int(height * 2 / 3), int(width / 2) - 213: int(width / 2) + 213, :]
+        resized_frame = cv2.resize(resized_frame, (224, 224))
         resized_frame = (resized_frame / 255).astype(np.float32)
+
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
-        print({class_names, predict})
-        print(class_names[int(np.argmax(predict))])
+        print(predict)
+        if abs(predict[0] - predict[2]) <= 0.9999 and predict[0] > 0.9:
+            print(class_names[0])
+        else:
+            print(class_names[int(np.argmax(predict))])
         print("\n")
 
-        cv2.imshow("window", frame)
+        cv2.imshow("window", resized_frame)
         cv2.waitKey(25)
 
         rawCapture.truncate(0)
