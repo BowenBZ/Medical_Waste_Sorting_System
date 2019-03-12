@@ -73,7 +73,13 @@ then you can open your brower and type `10.19.132.243:8000` to see the folders
 	* We use tensorflow-lite to transfer the model to a `.tflite` model
 	* Copy that model file to the Pi
 
+## Step Motor
+* 48 Steps is one cycle when the step motor is in the full mode.
+* 1.6 second is one cycle when the step motor is in the 1/4 mode and the PWM frequency is 500, dutycycle is 128(0.5 up and 0.5 down)
+
 ## Run the Demo
 Just run the script of `main.py`. However, we haven't finished the detecting code in real machine, so we need to go to the folder `~/Ecomed/object_detection` and run the following script
 ```xvfb-run python3 camera_control.py```
 
+## Reference
+[1] [Step motro](https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/)
