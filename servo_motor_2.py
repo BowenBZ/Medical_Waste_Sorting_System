@@ -20,28 +20,24 @@ def angle_to_duty_cycle(angle):
 def stop_tmp():
 	servo_motor.ChangeDutyCycle(0)
 
-
-servo_motor.start(angle_to_duty_cycle(float(225)))
-time.sleep(1)
-stop_tmp()
-
+def initialize_motor():
+	# Initialization
+        servo_motor.start(angle_to_duty_cycle(float(215)))
+        time.sleep(1)
+	#stop_tmp()
 
 def open_door(flag):
 	if flag:
 		servo_motor.ChangeDutyCycle(angle_to_duty_cycle(float(170)))
 		time.sleep(1)
-		stop_tmp()
+		#stop_tmp()
 	else:
-		servo_motor.ChangeDutyCycle(angle_to_duty_cycle(float(225)))
+		servo_motor.ChangeDutyCycle(angle_to_duty_cycle(float(230)))
 		time.sleep(2)
-		stop_tmp()
-
-def open_close_door():
-	open_door(True)
-	time.sleep(1)
-	open_door(False)
+		#stop_tmp()
 
 if __name__ == "__main__":
+	initialize_motor()
 	try:
 		while True:
 			flag = input('Open door(y/n)?: ')

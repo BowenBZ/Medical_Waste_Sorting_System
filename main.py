@@ -9,10 +9,11 @@ import sys
 from time import sleep
 import heapq
 from operator import itemgetter
+import motor_control_all
 
 # The folder that store the models
 model_path = './models'
-tflite_model_path = os.path.join(model_path, 'model_clean.tflite')
+tflite_model_path = os.path.join(model_path, 'model_clean2.tflite')
 # Create a tflite interpreter, this is the part of tflite that actually runs models.
 interpreter = tf.contrib.lite.Interpreter(model_path=tflite_model_path)
 # Allocate memory for the all the weight tensors and such.
@@ -72,27 +73,30 @@ try:
 
         # resized_frame = cv2.resize(frame, (224, 224))
         # resized_frame = (resized_frame / 255).astype(np.float32)
+        if not motor_control_all.is_moving:
+            input_data = resized_frame[tf.newaxis, ...]
+            predict = run_interpreter(input_data)
+            predict_tmp = []
+            for num in predict:
+                predict_tmp.append(round(num, 4))
+            print(predict_tmp)
+            if predict_tmp[2] > 0.1:
+                predict = 2
+            else:
+                predict = int(np.argmax(predict))
 
-        input_data = resized_frame[tf.newaxis, ...]
-        predict = run_interpreter(input_data)
-        predict_tmp = []
-        for num in predict:
-            predict_tmp.append(round(num, 4))
-        print(predict_tmp)
-        print(class_names[int(np.argmax(predict))])
-        print('\n')
-        # if abs(predict[0] - predict[2]) <= 0.9999 and predict[0] > 0.9:
-        #     print(class_names[0])
-        # else:
-        #     print(class_names[int(np.argmax(predict))])
-        # print("\n")
+            print(class_names[predict])
+            print('\n')
 
-        sleep(2)
+            if predict != 0:
+                motor_control_all.update_state(predict)
+
         cv2.imshow("window", resized_frame)
         cv2.waitKey(25)
 
         rawCapture.truncate(0)
 except KeyboardInterrupt:
+    step_motor.rotate(False)
     camera.close()
     cv2.destroyAllWindows()
 

@@ -22,7 +22,7 @@ RESOLUTION = {'Full': (0, 0, 0),
               '1/16': (0, 0, 1),
               '1/32': (1, 0, 1)}
 for i in range(3):
-    pi.write(MODE[i], RESOLUTION['1/4'][i])
+    pi.write(MODE[i], RESOLUTION['1/32'][i])
 
 pi.write(DIR, 1)  # Set direction
 
@@ -33,23 +33,51 @@ def rotate(flag):
 		pi.set_PWM_dutycycle(STEP, 128)  # PWM 1/2 On 1/2 Off
 		pi.set_PWM_frequency(STEP, 500)  # 500 pulses per second
 	else:
-		pi.set_PWM_dutycycle(STEP, 0) 
-		pi.set_PWM_frequency(STEP, 0)
-		sleep(1)
-		#pi.write(SLEEP, 0)
+		pi.write(STEP, 0) 
+		sleep(2)
+		pi.write(SLEEP, 0)
+		# sleep(2)
+		# pi.write(SLEEP, 0)
 
-def rotate_angle(angle):
-	run_time = angle / 360 * 1.6 # 1.6s is 360
+def run(time):
 	rotate(True)
-	sleep(run_time)
+	sleep(time)
 	rotate(False)
+
+delta_time = 1.6
+
+def update_state(new_state):
+	if new_state == 1:
+		pi.write(DIR, 1)
+		run(delta_time)
+	elif new_state == 2:
+		pi.write(DIR, 0)
+		run(delta_time)
+	elif new_state == 3:
+		pi.write(DIR, 0)
+		run(delta_time * 3)
+
+def update_state_reverse(pre_state):
+	if pre_state == 1:
+		pi.write(DIR, 0)
+		run(delta_time)
+	elif pre_state == 2:
+		pi.write(DIR, 1)
+		run(delta_time)
+	elif pre_state == 3:
+		pi.write(DIR, 1)
+		run(delta_time * 3)
 
 if __name__ == "__main__":
 	try:
 	    while True:
 	    	time = input("Please input the seconds you want to run： ")
+	    	if float(time) > 0:
+	    		pi.write(DIR, 1)  # Set direction
+	    	else:
+	    		pi.write(DIR, 0)
 	    	rotate(True)
-	    	sleep(float(time))
+	    	sleep(abs(float(time)))
 	    	rotate(False)
 	except KeyboardInterrupt:
 	    print ("\nCtrl-C pressed.  Stopping PIGPIO and exiting...")
