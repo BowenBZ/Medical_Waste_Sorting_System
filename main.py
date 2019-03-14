@@ -12,7 +12,7 @@ from operator import itemgetter
 
 # The folder that store the models
 model_path = './models'
-tflite_model_path = os.path.join(model_path, 'model_4classes.tflite')
+tflite_model_path = os.path.join(model_path, 'model_clean.tflite')
 # Create a tflite interpreter, this is the part of tflite that actually runs models.
 interpreter = tf.contrib.lite.Interpreter(model_path=tflite_model_path)
 # Allocate memory for the all the weight tensors and such.
@@ -75,7 +75,10 @@ try:
 
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
-        print(predict)
+        predict_tmp = []
+        for num in predict:
+            predict_tmp.append(round(num, 4))
+        print(predict_tmp)
         print(class_names[int(np.argmax(predict))])
         print('\n')
         # if abs(predict[0] - predict[2]) <= 0.9999 and predict[0] > 0.9:
@@ -84,6 +87,7 @@ try:
         #     print(class_names[int(np.argmax(predict))])
         # print("\n")
 
+        sleep(2)
         cv2.imshow("window", resized_frame)
         cv2.waitKey(25)
 
