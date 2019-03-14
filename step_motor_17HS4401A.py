@@ -36,7 +36,7 @@ def rotate(flag):
 		pi.set_PWM_dutycycle(STEP, 0) 
 		pi.set_PWM_frequency(STEP, 0)
 		sleep(1)
-		pi.write(SLEEP, 0)
+		#pi.write(SLEEP, 0)
 
 def rotate_angle(angle):
 	run_time = angle / 360 * 1.6 # 1.6s is 360

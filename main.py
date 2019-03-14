@@ -12,7 +12,7 @@ from operator import itemgetter
 
 # The folder that store the models
 model_path = './models'
-tflite_model_path = os.path.join(model_path, 'model_big4.tflite')
+tflite_model_path = os.path.join(model_path, 'model_4classes.tflite')
 # Create a tflite interpreter, this is the part of tflite that actually runs models.
 interpreter = tf.contrib.lite.Interpreter(model_path=tflite_model_path)
 # Allocate memory for the all the weight tensors and such.
@@ -42,6 +42,7 @@ class_names = ["background", "pharmaceutical", "sharps", "trace_chemo"]
 # Set up camera constants
 #MAX is 1280
 IM_WIDTH = 640
+scale = 1 / 2
 
 # Initialize frame rate calculation
 frame_rate_calc = 1
@@ -62,9 +63,15 @@ try:
         frame.setflags(write=1)
 
         height, width, _ = frame.shape
-        resized_frame = frame[:int(height * 2 / 3), int(width / 2) - 213: int(width / 2) + 213, :]
+        # resized_frame = frame[:int(height * 2 / 3), int(width / 2) - 213: int(width / 2) + 213, :]
+        resized_frame = frame[:int(height * scale), \
+                                int(width / 2 - width * scale / 2): int(width / 2 + width * scale / 2), \
+                                :]
         resized_frame = cv2.resize(resized_frame, (224, 224))
         resized_frame = (resized_frame / 255).astype(np.float32)
+
+        # resized_frame = cv2.resize(frame, (224, 224))
+        # resized_frame = (resized_frame / 255).astype(np.float32)
 
         input_data = resized_frame[tf.newaxis, ...]
         predict = run_interpreter(input_data)
