@@ -1,5 +1,4 @@
-# Author: Bowen Zhang
-#xvfb-run python3 data_collection.py
+# This script is used to check the settings of the camera
 
 # Import packages
 import os

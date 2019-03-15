@@ -1,3 +1,8 @@
+# This is the main script that hold our whole program. The basic logic of this script is 
+# 1. Capture image from camera, and put it into our model
+# 2. If there is nothing in the image, keep capturing new images. Otherwise let the step motor rotate with a spercific angle, then use servo motor to open and close the door. Then let the step motor rotate reversely with a specific angle
+# 3. Continue to capture new image
+
 import tensorflow as tf
 import numpy as np
 import os

@@ -1,3 +1,5 @@
+# This script is used to control the servo motor
+
 import RPi.GPIO as GPIO
 import time
 
@@ -6,8 +8,6 @@ servoPIN = 26
 GPIO.setup(servoPIN, GPIO.OUT)
 
 servo_motor = GPIO.PWM(servoPIN, 50)  # Set the frequency to 50Hz, so the duty cycle is 20ms
-
-# motor_moving = False
 
 # The servo motor is controled by the PWM every 20 ms. 
 # If the pulse for high is 0.5 ms (duty cycle: 2.5%), the servo angle will be 0;
@@ -19,12 +19,6 @@ def angle_to_duty_cycle(angle):
 
 def stop_tmp():
 	servo_motor.ChangeDutyCycle(0)
-
-
-servo_motor.start(angle_to_duty_cycle(float(225)))
-time.sleep(1)
-stop_tmp()
-
 
 def open_door(flag):
 	if flag:
@@ -40,6 +34,11 @@ def open_close_door():
 	open_door(True)
 	time.sleep(1)
 	open_door(False)
+
+
+servo_motor.start(angle_to_duty_cycle(float(225)))
+time.sleep(1)
+stop_tmp()
 
 if __name__ == "__main__":
 	try:

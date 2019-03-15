@@ -1,3 +1,5 @@
+# This script is used to control all the motors including servo motor and step motor with a clean logic
+
 import step_motor_17HS4401A as step_motor
 import servo_motor_ld_27mg as servo_motor
 import time

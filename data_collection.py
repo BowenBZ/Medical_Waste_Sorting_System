@@ -1,5 +1,4 @@
-# Author: Bowen Zhang
-#xvfb-run python3 data_collection.py if you from remote
+# This script is used to collect dataset for our project
 
 # Import packages
 import os
@@ -62,6 +61,8 @@ camera.framerate = 5
 rawCapture = PiRGBArray(camera, size=(IM_WIDTH,IM_HEIGHT))
 rawCapture.truncate(0)
 
+scale = 1 / 2
+
 try:
     for frame1 in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):        
         # Acquire frame and expand frame dimensions to have shape: [1, None, None, 3]
@@ -98,15 +99,18 @@ try:
 
             # crop
             height, width, _ = frame.shape
-            frame = frame[:int(height * 2 / 3), int(width / 2) - 213: int(width / 2) + 213, :]
+            resized_frame = frame[:int(height * scale), \
+                                    int(width / 2 - width * scale / 2): int(width / 2 + width * scale / 2), \
+                                    :]
+            resized_frame = cv2.resize(resized_frame, (224, 224))
 
             # Show the image
-            cv2.imshow('Last time image samll frame', frame)
+            cv2.imshow('Last time image samll frame', resized_frame)
             cv2.waitKey(1)
 
             # Save the image
             filename = data_path_crop + '/' + category + '/' + category + '_' + str_index +'.jpg'
-            cv2.imwrite(filename, frame)
+            cv2.imwrite(filename, resized_frame)
 
         elif ord('r') == key:
             if image_index > 0:

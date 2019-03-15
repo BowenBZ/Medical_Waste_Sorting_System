@@ -1,3 +1,5 @@
+# This script is used to control the step motor
+
 from time import sleep
 import pigpio
 
