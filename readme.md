@@ -1,7 +1,9 @@
 # Ecomed
 This is the code for the project Ecomed. Our team want to design an automatic sorting garbage can which can classify different kinds of medical waste. The system is running in the Raspberry Pi.
+![bin](https://drive.google.com/uc?id=1ce8hs5vJlcS4FhH1EZBe9S4C-XYOIA_e)
 
 For now, we can classify 4 different conditions. Background, pharmaceutical, sharps and trace_chemo.
+![waste](https://drive.google.com/uc?id=1nffkzQaLITJcL3fCN74owO1DK0tvwjDl)
 
 ## Environment in Raspberry PI
 * install tensorflow  
@@ -66,6 +68,8 @@ The model structure is as follows:
 	* Copy that model file to the Pi
 
 ## Hardware
+![overview](https://drive.google.com/uc?id=1jYNp0b0qVclo1yoNszAvLSC2zM0j5qFy)
+
 ### Raspberry Pi - 3B+
 We used `Raspberry Pi 3b+` to do our project. In order to connect to the Pi
 1. Use the following command to log into our raspberry pi  
