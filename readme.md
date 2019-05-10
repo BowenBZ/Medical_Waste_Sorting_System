@@ -1,4 +1,4 @@
-# Ecomed
+# Medical Waste Sorting System
 This is the code for the project Ecomed. Our team want to design an automatic sorting garbage can which can classify different kinds of medical waste. The system is running in the Raspberry Pi.
 ![bin](https://drive.google.com/uc?id=1ce8hs5vJlcS4FhH1EZBe9S4C-XYOIA_e)
 
