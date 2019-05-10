@@ -99,4 +99,4 @@ We used the Pi Camera with wide angle of 175 degree and night vision `5MP OV5647
 * Use command `xvfb-run python3 main.py` to run the processing
 
 ## Reference
-[1] [Step motro](https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/)
+[1] [Step motor](https://www.rototron.info/raspberry-pi-stepper-motor-tutorial/)
